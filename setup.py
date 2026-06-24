@@ -1,5 +1,5 @@
 from setuptools import find_packages,setup
-from typing import List
+
 HYPHEN_E_DOT="-e ."
 def get_requirements(filename):
     """get_requirements This function will return the list of packages in filename <requirements.txt>
@@ -17,11 +17,12 @@ def get_requirements(filename):
     if (HYPHEN_E_DOT in stripped_package_list):
         stripped_package_list.remove(HYPHEN_E_DOT)
     return stripped_package_list
+
 setup(
     name="mlproject",
     version="0.0.1",
     author="Hritik",
-    author_email="agarwal.hritik98@gmail.com",
+    author_email="agarwal.hritik96@gmail.com",
     packages=find_packages(),
     install_requires=get_requirements("requirements.txt")
 )
