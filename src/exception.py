@@ -19,5 +19,5 @@ class CustomException(Exception):
 #     c=1/0
 # except Exception as e:
 #     custom_error=CustomException(e,sys)
-#     logger.logging.error(custom_error)  # it is not required to mention logger, since when import logger the logger.py runs
+#     logging.error(custom_error)
 #     raise custom_error from None # Stops program and shows clean message (without Tracebacks)
