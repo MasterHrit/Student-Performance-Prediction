@@ -1,4 +1,8 @@
 pandas
 seaborn
 numpy
--e .
+ipykernel
+matplotlib
+scikit-learn
+xgboost
+# -e . we will build the package at last
