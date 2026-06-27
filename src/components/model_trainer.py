@@ -1,0 +1,92 @@
+import os
+import sys
+from dataclasses import dataclass
+
+from src.logger import logging
+from src.exception import CustomException
+from src.utils import save_object,evaluate_model
+
+## We need to train all the models and get the result
+from sklearn.linear_model import LinearRegression,Ridge,Lasso
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.svm import SVR
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor,AdaBoostRegressor,GradientBoostingRegressor
+from xgboost import XGBRegressor
+
+from sklearn.metrics import r2_score
+
+@dataclass
+class ModelTrainerConfig:
+    trained_model_file_path=os.path.join("artifacts","model.pkl")
+
+class ModelTrainer:
+    def __init__(self) -> None:
+        self.model_trainer_config=ModelTrainerConfig()
+    
+    def initiate_model_training(self,train_data,test_data,preprocessor_path):
+        
+        try:
+            # Now I will split the data to X and y
+            logging.info("Train Data Split Started to X and y")
+            X_train=train_data[:,:-1]
+            y_train=train_data[:,-1]
+            logging.info("Test Data Split Started to X and y")
+            X_test=test_data[:,:-1]
+            y_test=test_data[:,-1]
+            # I could have also done below for splitting
+            # X_train,y_train,X_test,y_test=(
+            #     train_data[:,:-1],
+            #     train_data[:,-1],
+            #     test_data[:,:-1],
+            #     test_data[:,-1]
+            # )
+            # Now I will train the model Linear Regression Model and get the accuracy in terms of r2 score
+            models={
+                "Linear Regression":LinearRegression(n_jobs=-1),
+                "Ridge":Ridge(),
+                "Lasso":Lasso(),
+                "SVR":SVR(),
+                "KNNRegressor":KNeighborsRegressor(n_jobs=-1),
+                "Decision_Tree_Regressor":DecisionTreeRegressor(),
+                "RandomForestRegressor":RandomForestRegressor(n_jobs=-1),
+                "AdaboostRegressor":AdaBoostRegressor(),
+                "GradientBoostRegressor":GradientBoostingRegressor(),
+                "XgBoostRegressor":XGBRegressor()
+            }
+
+            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
+            
+            ## To get the best model score from report
+            best_model_score=max(model_report.values())
+            ## To get best model name from dict
+            best_model_name=list(model_report.keys())[list(model_report.values()).index(best_model_score)]
+
+            ## best_model_name, best_model_score = max(model_report.items(),key=lambda item: item[1])   -- Also an approach to find the max based on 2nd item i.e the score
+            best_model=models[best_model_name]
+
+            if best_model_score<0.6:
+                logging.error("No Best Model Found")
+                raise CustomException("No Best Model Found",sys)
+            
+            logging.info("Best Model Found")
+
+            # Saving the model in pkl
+            save_object(
+                file_path=self.model_trainer_config.trained_model_file_path,
+                obj=best_model
+            )
+            logging.info("Best Model Objected Saved")
+            predicted=best_model.predict(X_test)
+            r2_square=r2_score(y_test,predicted)
+            # This was not required, we could have just returned the best_model_score
+
+            return (
+                self.model_trainer_config.trained_model_file_path,
+                best_model_name,
+                r2_square
+            )
+
+        except Exception as e:
+            logging.error(e)
+            raise CustomException(e,sys)
