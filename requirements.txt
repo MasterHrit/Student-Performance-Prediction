@@ -5,4 +5,5 @@ ipykernel
 matplotlib
 scikit-learn
 xgboost
+dill
 # -e . we will build the package at last
