@@ -1,9 +1,4 @@
 # Data Transformation
-# I have already saved the training, testing and raw data in artifacts
-# I need to transform the data --> create a function data_transform that transforms the training and testing data
-# Here we can use the initiate_data_ingestion function from DataIngestion class that returns the file path
-# Then use the filepath for training and testing to transform it, I need to transform the independent vairables only and return the X_train and X_test after transformation
-# Should I create a Data Transformation Class or not ?
 
 import os
 import sys
