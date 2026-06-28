@@ -55,7 +55,62 @@ class ModelTrainer:
                 "XgBoostRegressor":XGBRegressor()
             }
 
-            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models)
+            # One more way to get the parameter is create parameter file separately and read it here
+            parameters={
+                "Ridge":{
+                    "alpha":[0.001, 0.01, 0.1, 1, 10, 100],
+                    # "max_iter":[100,200,500,1000,2000,5000],
+                    # "solver":["auto", "svd", "cholesky", "lsqr", "sparse_cg", "sag", "saga", "lbfgs"]
+                },
+                "Lasso":{
+                    "alpha":[0.001, 0.01, 0.1, 1, 10, 100],
+                    # "max_iter":[100,200,500,1000,2000,5000],
+                    # "selection":["cyclic","random"]
+                },
+                "SVR":{
+                    "kernel":["linear","poly","rbf","sigmoid"],
+                    # "degree":[1,2,3,4,5,6],
+                    # "gamma":["scale","auto"],
+                    # "max_iter":[100,200,500,1000,2000,5000],
+                    # "epsilon":[0.01, 0.05, 0.1, 0.2, 0.5]
+                },
+                "KNNRegressor":{
+                    "n_neighbors":[i for i in range(1,11,3)]
+                },
+                "Decision_Tree_Regressor":{
+                    "criterion":["squared_error","absolute_error","poisson"],
+                    # "splitter":["best","random"],
+                    # "max_depth":[1,2,3,4,5,6,7,8,9,10,15,20,25],
+                    # "max_features":["auto","sqrt","log2"]
+                },
+                "RandomForestRegressor":{
+                    "n_estimators":[100,200,500,1000],
+                    # "criterion":["squared_error", "absolute_error", "poisson"],
+                    # "max_depth":[5,8,10,15,"None"],
+                    # "min_samples_split":[2,8,15,20],
+                    # "max_features":[5,7,"auto",8]
+                },
+                "AdaboostRegressor":{
+                    "n_estimators":[50,60,70,80,90,100],
+                    # "loss":["linear", "square", "exponential"]
+                },
+                "GradientBoostRegressor":{
+                    "loss":["squared_error","huber","absolute_error","quantile"],
+                    # "criterion":["friedman_mse","squared_error"],
+                    # "min_samples_split":[2,8,15,20],
+                    # "n_estimators":[100,200,500,1000],
+                    # "max_depth":[5,8,15,None,10]
+                    #"learning_rate":[0.1,0.01,0.02,0.03]
+                },
+                "XgBoostRegressor":{
+                    "n_estimators":[100,200,300],
+                    # "learning_rate":[0.1,0.01],
+                    # "max_depth":[5,8,12,20,30],
+                    # "colsample_bytree":[0.5,0.8,1,0.3,0.4]
+                }
+            }
+
+            model_report:dict=evaluate_model(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,models=models,param=parameters)
             
             ## To get the best model score from report
             best_model_score=max(model_report.values())
@@ -78,8 +133,7 @@ class ModelTrainer:
             )
             logging.info("Best Model Objected Saved")
             predicted=best_model.predict(X_test)
-            r2_square=r2_score(y_test,predicted)
-            # This was not required, we could have just returned the best_model_score
+            r2_square=r2_score(y_test,predicted)            
 
             return (
                 self.model_trainer_config.trained_model_file_path,
