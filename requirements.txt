@@ -6,4 +6,5 @@ matplotlib
 scikit-learn
 xgboost
 dill
+flask
 # -e . we will build the package at last
