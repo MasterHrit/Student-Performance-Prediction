@@ -47,4 +47,4 @@ Click **Predict** to get the estimated Math Score instantly.
 - Docker
 - Render
 
-...
+---
