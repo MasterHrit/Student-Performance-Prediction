@@ -219,8 +219,4 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Artifacts
-artifacts/model.pkl
-artifacts/preprocessor.pkl
-artifacts/test.csv
-artifacts/train.csv
 MyPlans
