@@ -4,7 +4,7 @@ An end-to-end Machine Learning project that predicts a student's **Math Score** 
 
 ## Live Demo
 
-**Application:** https://mlproject-zhry.onrender.com
+**Application:** https://student-performance-prediction-jr1o.onrender.com
 
 ## Features
 
