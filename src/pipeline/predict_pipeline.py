@@ -10,7 +10,7 @@ class PredictPipeline:
     def __init__(self) -> None:
         pass
     def predict(self,features):
-        try:
+        # try:
             model_path="artifacts/model.pkl"
             preprocessor_path="artifacts/preprocessor.pkl"
             model=load_object(filepath=model_path)
@@ -20,9 +20,9 @@ class PredictPipeline:
 
             return preds
         
-        except Exception as e:
-            logging.error(e)
-            raise CustomException(e,sys)
+        # except Exception as e:
+        #     logging.error(e)
+        #     raise CustomException(e,sys)
 
 class CustomData:
     def __init__(self,gender,race_ethnicity,parental_level_of_education,lunch,test_preparation_course,reading_score,writing_score) -> None:
